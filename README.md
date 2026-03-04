@@ -5,18 +5,14 @@ This is the official website for MicYou, a professional microphone streaming sof
 ## Technology Stack
 
 - **Framework**: Astro 5
-- **Design System**: Material Design 3 guidelines (Vanilla CSS + CSS Variables)
+- **Design System**: Material Design 3
 - **Tooling**: Biome (Linter & Formatter), TypeScript
-- **i18n**: Built-in support for English and Chinese
-- **Icons**: Google Material Symbols Rounded
-- **Fonts**: Roboto
 
 ## Features
 
 - **Responsive Implementation**: Works seamlessly on desktop and mobile.
 - **Modern UI**: Dark mode by default, glassmorphism effects, smooth animations.
 - **Component-Based**: Reusable Astro components for easy maintenance.
-- **Internationalization (i18n)**: Multi-language support.
 
 ## Project Setup
 
@@ -29,26 +25,25 @@ pnpm install
 ### Run Development Server
 
 ```sh
-pnpm run dev
+pnpm dev
 ```
 
 ### Type Check & Linting
 
 ```sh
-pnpm run type-check
-pnpm run lint
+pnpm lint
 ```
 
 ### Format Code
 
 ```sh
-pnpm run format
+pnpm format
 ```
 
 ### Build for Production
 
 ```sh
-pnpm run build
+pnpm build
 ```
 
 ## Customization
