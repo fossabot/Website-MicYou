@@ -42,22 +42,39 @@ const { t } = Astro.props;
 
 	async function fetchContributors() {
 		try {
-			const res = await fetch(
-				"https://api.github.com/repos/LanRhyme/MicYou/contributors?per_page=100",
-			);
-			if (!res.ok) throw new Error(`HTTP ${res.status}`);
-			const data = await res.json();
-			if (!Array.isArray(data)) throw new Error(t.unexpectedResponse);
+			// 使用 stats API 获取准确的提交次数（与 GitHub 贡献者图表一致）
+			// stats API 可能返回 202（正在计算），需要重试
+			let statsData;
+			for (let retry = 0; retry < 5; retry++) {
+				const statsRes = await fetch(
+					"https://api.github.com/repos/LanRhyme/MicYou/stats/contributors",
+				);
+				if (statsRes.status === 202) {
+					// GitHub 正在计算统计数据，等待后重试
+					await new Promise((r) => setTimeout(r, 1000));
+					continue;
+				}
+				if (!statsRes.ok) throw new Error(`HTTP ${statsRes.status}`);
+				statsData = await statsRes.json();
+				break;
+			}
+			if (!statsData || !Array.isArray(statsData))
+				throw new Error(t.unexpectedResponse);
 
-			const contributors = data
+			const contributors = statsData
+				.map((item) => ({
+					login: item.author.login,
+					avatar_url: item.author.avatar_url,
+					html_url: item.author.html_url,
+					contributions: item.total,
+					type: item.author.type,
+				}))
 				.filter(
 					(c) =>
 						c.type === "User" &&
 						!c.login.toLowerCase().includes("bot"),
 				)
-				.sort(
-					(a, b) => b.contributions - a.contributions,
-				);
+				.sort((a, b) => b.contributions - a.contributions);
 
 			contentEl.textContent = "";
 			const grid = document.createElement("div");
