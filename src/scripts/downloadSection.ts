@@ -53,10 +53,6 @@ async function fetchRelease() {
 
 		const exeLabel = section.querySelector("[data-url='exe'] .btn-label");
 		if (exeLabel) exeLabel.textContent = t.btnWinDownload;
-
-		section.querySelectorAll(".version-tag").forEach((el) => {
-			el.textContent = data.tag_name;
-		});
 	} catch {
 		const exeLabel = section.querySelector("[data-url='exe'] .btn-label");
 		if (exeLabel) exeLabel.textContent = t.btnWinDownload;
@@ -76,13 +72,11 @@ async function detectAndHighlight() {
 		const cardPlatform = platformMap[platform];
 		if (!cardPlatform) return;
 
-		const card = section.querySelector<HTMLElement>(
+		const row = section.querySelector<HTMLElement>(
 			`[data-platform="${cardPlatform}"]`,
 		);
-		if (!card) return;
-		card.classList.add("recommended");
-		const badge = card.querySelector<HTMLElement>(".badge");
-		if (badge) badge.hidden = false;
+		if (!row) return;
+		row.classList.add("recommended");
 
 		const primaryUrlKey: Record<string, string> = {
 			windows: "exe",
@@ -92,7 +86,7 @@ async function detectAndHighlight() {
 		};
 		const key = primaryUrlKey[cardPlatform];
 		if (key) {
-			const btn = card.querySelector<HTMLElement>(`[data-url="${key}"]`);
+			const btn = row.querySelector<HTMLElement>(`[data-url="${key}"]`);
 			if (btn) {
 				const filled = document.createElement("md-filled-button");
 				for (const attr of Array.from(btn.attributes)) {
