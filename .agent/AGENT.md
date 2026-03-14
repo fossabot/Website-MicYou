@@ -116,6 +116,17 @@ Located in `.vitepress/theme/components/`:
 3. Update sidebar links in `src/docs/sidebar.ts`
 4. Update language translation configs if needed
 
+## Image Handling
+
+- **Never use external image links** (GitHub issue attachments, external URLs, etc.)
+- All images must be stored in `src/public/` folder
+- Reference images using root-relative paths:
+  ```markdown
+  ![Description](/image-name.png)
+  ```
+- Use descriptive, lowercase file names with hyphens (e.g., `input-device.png`)
+- Supported formats: PNG, JPG, SVG, WebP, GIF
+
 ## Deployment
 
 - Automatic deployment to GitHub Pages via GitHub Actions

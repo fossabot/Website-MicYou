@@ -132,6 +132,16 @@ docs: update FAQ with new troubleshooting steps
 - Keep lines under 100 characters
 - Use relative links for internal references
 
+### Image Guidelines
+
+- **Do not use external image links** (e.g., GitHub issue attachments, external URLs)
+- Place all images in `src/public/` folder
+- Reference images using root-relative paths:
+  ```markdown
+  ![Description](/image-name.png)
+  ```
+- Use descriptive file names (e.g., `input-device.png`, `output-device.png`)
+
 ### Translation Guidelines
 
 - Maintain consistent terminology across languages
