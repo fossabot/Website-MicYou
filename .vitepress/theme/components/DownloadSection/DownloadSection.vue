@@ -1,80 +1,116 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import { useData } from 'vitepress'
-import { downloadTranslations, type Lang } from '../../../data/i18n'
+import { ref, onMounted, computed } from "vue";
+import { useData } from "vitepress";
+import { downloadTranslations, type Lang } from "../../../data/i18n";
 
-const { lang } = useData()
-const t = computed(() => downloadTranslations[lang.value as Lang] || downloadTranslations['zh-CN'])
+const { lang } = useData();
+const t = computed(
+	() =>
+		downloadTranslations[lang.value as Lang] || downloadTranslations["zh-CN"],
+);
 
-const latestVersion = ref('')
-const loading = ref(true)
-const error = ref(false)
-const copiedId = ref<string | null>(null)
+const latestVersion = ref("");
+const loading = ref(true);
+const error = ref(false);
+const copiedId = ref<string | null>(null);
 
 const platforms = computed(() => [
-  {
-    name: 'Windows', icon: 'simple-icons:windows', description: t.value.windowsDesc,
-    files: [
-      { name: t.value.installer, pattern: 'MicYou-Win-{version}-installer.exe' },
-      { name: `${t.value.portable} (JRE)`, pattern: 'MicYou-Win-{version}.zip' },
-      { name: `${t.value.portable} (NoJRE)`, pattern: 'MicYou-Win-NoJRE-{version}.zip' }
-    ]
-  },
-  {
-    name: 'macOS', icon: 'simple-icons:macos', description: t.value.macOSDesc,
-    files: [
-      { name: 'DMG (Apple Silicon)', pattern: 'MicYou-macOS-{version}-arm64.dmg' },
-      { name: 'DMG (Intel)', pattern: 'MicYou-macOS-{version}-x64.dmg' },
-      { name: `${t.value.portable} (NoJRE)`, pattern: 'MicYou-macOS-NoJRE-{version}.tar.gz' }
-    ]
-  },
-  {
-    name: 'Linux', icon: 'simple-icons:linux', description: t.value.linuxDesc,
-    files: [
-      { name: 'DEB', pattern: 'MicYou-Linux-{version}.deb' },
-      { name: 'RPM', pattern: 'MicYou-Linux-{version}.rpm' },
-      { name: 'Arch', copyCommand: 'paru -S micyou-bin' },
-      { name: `${t.value.portable} (NoJRE)`, pattern: 'MicYou-Linux-NoJRE-{version}.tar.gz' }
-    ]
-  },
-  {
-    name: 'Android', icon: 'simple-icons:android', description: t.value.androidDesc,
-    files: [{ name: 'APK', pattern: 'MicYou-Android-{version}.apk' }]
-  }
-])
+	{
+		name: "Windows",
+		icon: "simple-icons:windows",
+		description: t.value.windowsDesc,
+		files: [
+			{
+				name: t.value.installer,
+				pattern: "MicYou-Win-{version}-installer.exe",
+			},
+			{
+				name: `${t.value.portable} (JRE)`,
+				pattern: "MicYou-Win-{version}.zip",
+			},
+			{
+				name: `${t.value.portable} (NoJRE)`,
+				pattern: "MicYou-Win-NoJRE-{version}.zip",
+			},
+		],
+	},
+	{
+		name: "macOS",
+		icon: "simple-icons:macos",
+		description: t.value.macOSDesc,
+		files: [
+			{
+				name: "DMG (Apple Silicon)",
+				pattern: "MicYou-macOS-{version}-arm64.dmg",
+			},
+			{ name: "DMG (Intel)", pattern: "MicYou-macOS-{version}-x64.dmg" },
+			{
+				name: `${t.value.portable} (NoJRE)`,
+				pattern: "MicYou-macOS-NoJRE-{version}.tar.gz",
+			},
+		],
+	},
+	{
+		name: "Linux",
+		icon: "simple-icons:linux",
+		description: t.value.linuxDesc,
+		files: [
+			{ name: "DEB", pattern: "MicYou-Linux-{version}.deb" },
+			{ name: "RPM", pattern: "MicYou-Linux-{version}.rpm" },
+			{ name: "Arch", copyCommand: "paru -S micyou-bin" },
+			{
+				name: `${t.value.portable} (NoJRE)`,
+				pattern: "MicYou-Linux-NoJRE-{version}.tar.gz",
+			},
+		],
+	},
+	{
+		name: "Android",
+		icon: "simple-icons:android",
+		description: t.value.androidDesc,
+		files: [{ name: "APK", pattern: "MicYou-Android-{version}.apk" }],
+	},
+]);
 
 const getDownloadUrl = (pattern: string) =>
-  `https://github.com/LanRhyme/MicYou/releases/download/v${latestVersion.value}/${pattern.replace('{version}', latestVersion.value)}`
+	`https://github.com/LanRhyme/MicYou/releases/download/v${latestVersion.value}/${pattern.replace("{version}", latestVersion.value)}`;
 
 const copyCommand = async (cmd: string) => {
-  try {
-    await navigator.clipboard.writeText(cmd)
-    copiedId.value = cmd
-    setTimeout(() => copiedId.value = null, 2000)
-  } catch { /* ignore */ }
-}
+	try {
+		await navigator.clipboard.writeText(cmd);
+		copiedId.value = cmd;
+		setTimeout(() => (copiedId.value = null), 2000);
+	} catch {
+		/* ignore */
+	}
+};
 
 onMounted(async () => {
-  const CACHE_KEY = 'micyou-version'
-  const CACHE_TTL = 6 * 60 * 60 * 1000
+	const CACHE_KEY = "micyou-version";
+	const CACHE_TTL = 6 * 60 * 60 * 1000;
 
-  try {
-    const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}')
-    if (cached.version && Date.now() - cached.time < CACHE_TTL) {
-      latestVersion.value = cached.version
-      return
-    }
+	try {
+		const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || "{}");
+		if (cached.version && Date.now() - cached.time < CACHE_TTL) {
+			latestVersion.value = cached.version;
+			return;
+		}
 
-    const res = await fetch('https://api.github.com/repos/LanRhyme/MicYou/releases/latest')
-    const data = await res.json()
-    latestVersion.value = data.tag_name.replace(/^v/, '')
-    localStorage.setItem(CACHE_KEY, JSON.stringify({ version: latestVersion.value, time: Date.now() }))
-  } catch {
-    error.value = true
-  } finally {
-    loading.value = false
-  }
-})
+		const res = await fetch(
+			"https://api.github.com/repos/LanRhyme/MicYou/releases/latest",
+		);
+		const data = await res.json();
+		latestVersion.value = data.tag_name.replace(/^v/, "");
+		localStorage.setItem(
+			CACHE_KEY,
+			JSON.stringify({ version: latestVersion.value, time: Date.now() }),
+		);
+	} catch {
+		error.value = true;
+	} finally {
+		loading.value = false;
+	}
+});
 </script>
 
 <template>
