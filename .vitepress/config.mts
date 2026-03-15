@@ -9,6 +9,9 @@ export default defineConfig({
 	title: "MicYou",
 	description: "将 Android 设备转变为 PC 的高质量麦克风",
 	cleanUrls: true,
+	sitemap: {
+		hostname: "https://micyou.top",
+	},
 
 	markdown: {
 		lineNumbers: true,
