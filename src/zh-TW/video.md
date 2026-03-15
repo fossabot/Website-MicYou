@@ -9,22 +9,22 @@ aside: false
 
 <div class="video-item">
   <span>專案簡介</span>
-  <iframe src="//player.bilibili.com/player.html?bvid=BV1oucszjE5u&autoplay=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+  <iframe src="//player.bilibili.com/player.html?bvid=BV1oucszjE5u&autoplay=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" title="MicYou 專案簡介影片"></iframe>
 </div>
 
 <div class="video-item">
   <span>更新介紹</span>
-  <iframe src="//player.bilibili.com/player.html?bvid=BV1KufpBQEtT&autoplay=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+  <iframe src="//player.bilibili.com/player.html?bvid=BV1KufpBQEtT&autoplay=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" title="MicYou 更新介紹影片"></iframe>
 </div>
 
 <div class="video-item">
   <span>使用教學 (Bilibili)</span>
-  <iframe src="//player.bilibili.com/player.html?bvid=BV1MpNKz8ELw&autoplay=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+  <iframe src="//player.bilibili.com/player.html?bvid=BV1MpNKz8ELw&autoplay=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" title="MicYou 使用教學 - Bilibili"></iframe>
 </div>
 
 <div class="video-item">
   <span>使用教學 (YouTube)</span>
-  <iframe src="https://www.youtube.com/embed/x6LQIMbf36w" frameborder="0" allowfullscreen="true"></iframe>
+  <iframe src="https://www.youtube.com/embed/x6LQIMbf36w" frameborder="0" allowfullscreen="true" title="MicYou 使用教學 - YouTube"></iframe>
 </div>
 
 </div>

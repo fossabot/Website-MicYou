@@ -115,30 +115,30 @@ onMounted(async () => {
 
 <template>
   <div class="download-container">
-    <div class="download-header">
+    <header class="download-header">
       <h1 class="download-title">{{ t.title }}</h1>
-      <span v-if="latestVersion" class="version-badge">v{{ latestVersion }}</span>
-    </div>
+      <span v-if="latestVersion" class="version-badge" aria-label="最新版本">v{{ latestVersion }}</span>
+    </header>
 
-    <div v-if="loading" class="state-center">
-      <span class="loading-spinner"></span>
+    <div v-if="loading" class="state-center" role="status" aria-live="polite">
+      <span class="loading-spinner" aria-hidden="true"></span>
       <span>{{ t.loading }}</span>
     </div>
 
-    <div v-else-if="error" class="state-center">
+    <div v-else-if="error" class="state-center" role="alert">
       <p>{{ t.error }}</p>
-      <a href="https://github.com/LanRhyme/MicYou/releases/latest" target="_blank" class="fallback-link">
+      <a href="https://github.com/LanRhyme/MicYou/releases/latest" target="_blank" rel="noopener noreferrer" class="fallback-link">
         {{ t.viewOnGitHub }}
       </a>
     </div>
 
     <template v-else>
-      <div class="download-card">
+      <div class="download-card" role="region" :aria-label="t.title">
         <template v-for="(platform, idx) in _platforms" :key="platform.name">
-          <div v-if="idx" class="divider"></div>
+          <div v-if="idx" class="divider" aria-hidden="true"></div>
           <div class="download-row">
             <div class="platform-info">
-              <div class="platform-icon">
+              <div class="platform-icon" aria-hidden="true">
                 <iconify-icon :icon="platform.icon" />
               </div>
               <div>
@@ -146,14 +146,28 @@ onMounted(async () => {
                 <p>{{ platform.description }}</p>
               </div>
             </div>
-            <div class="download-options">
+            <div class="download-options" role="group" :aria-label="`${platform.name} 下载选项`">
               <template v-for="file in platform.files" :key="file.pattern || file.copyCommand">
-                <a v-if="file.pattern" :href="_getDownloadUrl(file.pattern)" class="btn" target="_blank">
-                  <iconify-icon icon="mdi:download" />
+                <a
+                  v-if="file.pattern"
+                  :href="_getDownloadUrl(file.pattern)"
+                  class="btn"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  :aria-label="`下载 ${file.name} (在新窗口打开)`"
+                >
+                  <iconify-icon icon="mdi:download" aria-hidden="true" />
                   <span>{{ file.name }}</span>
                 </a>
-                <button v-else class="btn" :class="{ copied: copiedId === file.copyCommand }" @click="_copyCommand(file.copyCommand!)">
-                  <iconify-icon :icon="copiedId === file.copyCommand ? 'mdi:check' : 'mdi:content-copy'" />
+                <button
+                  v-else
+                  class="btn"
+                  :class="{ copied: copiedId === file.copyCommand }"
+                  @click="_copyCommand(file.copyCommand!)"
+                  :aria-label="copiedId === file.copyCommand ? t.copied : `复制命令: ${file.name}`"
+                  :aria-pressed="copiedId === file.copyCommand"
+                >
+                  <iconify-icon :icon="copiedId === file.copyCommand ? 'mdi:check' : 'mdi:content-copy'" aria-hidden="true" />
                   <span>{{ copiedId === file.copyCommand ? t.copied : file.name }}</span>
                 </button>
               </template>
@@ -163,7 +177,7 @@ onMounted(async () => {
       </div>
 
       <div class="release-notes">
-        <a href="https://github.com/LanRhyme/MicYou/releases/latest" target="_blank">
+        <a href="https://github.com/LanRhyme/MicYou/releases/latest" target="_blank" rel="noopener noreferrer">
           {{ t.viewReleaseNotes }}
         </a>
       </div>

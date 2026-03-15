@@ -16,9 +16,15 @@ defineProps<Props>();
 <template>
   <article class="ContributorsItem">
     <!-- 点击跳转到贡献者GitHub主页 -->
-    <a class="profile" :href="member.link" target="_blank" rel="noopener noreferrer">
+    <a
+      class="profile"
+      :href="member.link"
+      target="_blank"
+      rel="noopener noreferrer"
+      :aria-label="`${member.name} - GitHub 主页 (在新窗口打开)`"
+    >
       <figure class="avatar">
-        <img class="avatar-img" :src="member.avatar" :alt="member.name" />
+        <img class="avatar-img" :src="member.avatar" :alt="`${member.name} 的头像`" />
       </figure>
       <div class="data">
         <h1 class="name">{{ member.name }}</h1>

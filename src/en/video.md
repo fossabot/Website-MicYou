@@ -9,22 +9,22 @@ aside: false
 
 <div class="video-item">
   <span>Introduction</span>
-  <iframe src="//player.bilibili.com/player.html?bvid=BV1oucszjE5u&autoplay=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+  <iframe src="//player.bilibili.com/player.html?bvid=BV1oucszjE5u&autoplay=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" title="MicYou Introduction Video"></iframe>
 </div>
 
 <div class="video-item">
   <span>What's New</span>
-  <iframe src="//player.bilibili.com/player.html?bvid=BV1KufpBQEtT&autoplay=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+  <iframe src="//player.bilibili.com/player.html?bvid=BV1KufpBQEtT&autoplay=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" title="MicYou What's New Video"></iframe>
 </div>
 
 <div class="video-item">
   <span>Tutorial (Bilibili)</span>
-  <iframe src="//player.bilibili.com/player.html?bvid=BV1MpNKz8ELw&autoplay=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+  <iframe src="//player.bilibili.com/player.html?bvid=BV1MpNKz8ELw&autoplay=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" title="MicYou Tutorial - Bilibili"></iframe>
 </div>
 
 <div class="video-item">
   <span>Tutorial (YouTube)</span>
-  <iframe src="https://www.youtube.com/embed/x6LQIMbf36w" frameborder="0" allowfullscreen="true"></iframe>
+  <iframe src="https://www.youtube.com/embed/x6LQIMbf36w" frameborder="0" allowfullscreen="true" title="MicYou Tutorial - YouTube"></iframe>
 </div>
 
 </div>

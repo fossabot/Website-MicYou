@@ -33,14 +33,13 @@ export default defineConfig({
 		["meta", { name: "theme-color", content: "#334355" }],
 		["meta", { property: "og:type", content: "website" }],
 		["meta", { property: "og:title", content: "MicYou" }],
-		[
-			"meta",
-			{
-				property: "og:description",
-				content: "将 Android 设备转变为 PC 的高质量麦克风",
-			},
-		],
+		["meta", { property: "og:description", content: "将 Android 设备转变为 PC 的高质量麦克风", }],
 		["meta", { property: "og:image", content: "/app_icon.png" }],
+		// 无障碍优化
+		["meta", { name: "format-detection", content: "telephone=no" }],
+		["meta", { name: "mobile-web-app-capable", content: "yes" }],
+		["meta", { name: "apple-mobile-web-app-capable", content: "yes" }],
+		["meta", { name: "apple-mobile-web-app-status-bar-style", content: "default" }],
 	],
 
 	locales: {

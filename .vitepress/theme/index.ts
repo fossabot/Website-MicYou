@@ -14,6 +14,22 @@ export default {
 	extends: DefaultTheme,
 	Layout: () => {
 		return h(DefaultTheme.Layout, null, {
+			"layout-top": () => {
+				const { lang } = useData();
+				const skipText: Record<string, string> = {
+					"zh-CN": "跳转到主要内容",
+					en: "Skip to main content",
+					"zh-TW": "跳轉到主要內容",
+				};
+				return h(
+					"a",
+					{
+						href: "#VPContent",
+						class: "skip-to-content",
+					},
+					skipText[lang.value] || skipText["zh-CN"],
+				);
+			},
 			"layout-bottom": () => {
 				// 从 VitePress 获取当前语言
 				const { lang } = useData();

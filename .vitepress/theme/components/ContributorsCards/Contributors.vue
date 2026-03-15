@@ -173,10 +173,10 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="contributors-section">
+  <section class="contributors-section" aria-labelledby="contributors-title">
     <!-- 作者展示 - 使用 VitePress TeamMembers 组件 -->
     <div class="authors-wrapper">
-      <h2 class="section-title">
+      <h2 id="authors-title" class="section-title">
         {{ t.developedWith }}
       </h2>
       <VPTeamMembers size="small" :members="authors" />
@@ -184,18 +184,16 @@ onMounted(async () => {
 
     <!-- 贡献者展示 - 使用 feature 风格卡片 -->
     <div v-if="contributors.length > 0" class="contributors-wrapper">
-      <h2 class="section-title">
+      <h2 id="contributors-title" class="section-title">
         {{ t.thanksContributors }}
       </h2>
-      <div class="contributors-grid">
-        <ContributorsItem
-          v-for="contributor in contributors"
-          :key="contributor.name"
-          :member="contributor"
-        />
-      </div>
+      <ul class="contributors-grid" role="list">
+        <li v-for="contributor in contributors" :key="contributor.name">
+          <ContributorsItem :member="contributor" />
+        </li>
+      </ul>
     </div>
-  </div>
+  </section>
 </template>
 
 <style scoped>
@@ -247,6 +245,8 @@ onMounted(async () => {
   width: 100%;
   max-width: 1152px;
   margin: 0 auto;
+  padding: 0;
+  list-style: none;
 }
 
 @media (max-width: 640px) {
