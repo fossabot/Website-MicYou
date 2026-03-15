@@ -73,7 +73,7 @@ export const footer = {
 // 主题配置
 export const themeConfig = {
 	editLink: {
-		pattern: "https://github.com/LanRhyme/MicYou/edit/master/docs/:path",
+		pattern: "https://github.com/LanRhyme/Website-MicYou/edit/master/src/docs/:path",
 		text: "在 GitHub 上编辑此页",
 	},
 	lastUpdated: {
@@ -162,7 +162,7 @@ export function getFooterData(): FooterData {
 							color: { light: "#334355", dark: "#6b8aad" },
 						},
 						name: footer.contributing,
-						link: "https://github.com/LanRhyme/MicYou/blob/master/CONTRIBUTING_zh-cn.md",
+						link: "https://github.com/LanRhyme/Website-MicYou/blob/master/CONTRIBUTING_zh-cn.md",
 						rel: "noopener noreferrer",
 					},
 				],

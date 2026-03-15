@@ -73,7 +73,7 @@ export const footer = {
 // Theme config
 export const themeConfig = {
 	editLink: {
-		pattern: "https://github.com/LanRhyme/MicYou/edit/master/docs/:path",
+		pattern: "https://github.com/LanRhyme/Website-MicYou/edit/master/src/docs/:path",
 		text: "Edit this page on GitHub",
 	},
 	lastUpdated: {
@@ -132,7 +132,7 @@ export function getFooterData(): FooterData {
 							color: { light: "#334355", dark: "#6b8aad" },
 						},
 						name: footer.githubRepo,
-						link: "https://github.com/LanRhyme/MicYou",
+						link: "https://github.com/LanRhyme/Website-MicYou",
 						rel: "noopener noreferrer",
 					},
 					{
