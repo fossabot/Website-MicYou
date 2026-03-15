@@ -1,5 +1,7 @@
 ---
 aside: false
+title: 视频教程 - MicYou 使用教程
+description: MicYou 视频教程，包含项目简介、更新介绍和使用教程，帮助您快速上手将手机变成电脑麦克风。
 ---
 
 # 视频教程

@@ -1,3 +1,8 @@
+---
+title: Quick Start - MicYou Installation Guide
+description: MicYou quick start guide with detailed instructions on how to install and configure MicYou on Windows, macOS, Linux, and Android to turn your phone into a PC microphone.
+---
+
 ## Quick Start
 
 ### 1. Download ADB

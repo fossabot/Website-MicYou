@@ -1,5 +1,7 @@
 ---
 layout: home
+title: MicYou - 将手机变成电脑麦克风
+description: MicYou 是一款高质量、低延迟、跨平台的音频传输解决方案，支持 Wi-Fi、USB 和蓝牙连接，可将 Android 手机变成电脑麦克风。
 
 hero:
   name: "MicYou"

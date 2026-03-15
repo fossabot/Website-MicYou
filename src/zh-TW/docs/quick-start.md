@@ -1,3 +1,8 @@
+---
+title: 快速開始 - MicYou 安裝設定指南
+description: MicYou 快速開始指南，詳細介紹如何在 Windows、macOS、Linux 和 Android 上安裝和設定 MicYou，將手機變成電腦麥克風。
+---
+
 # 快速開始
 
 ## 1. 下載 ADB
