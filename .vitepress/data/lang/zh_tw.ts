@@ -5,7 +5,7 @@ import type { DefaultTheme } from 'vitepress'
 export const nav: DefaultTheme.NavItem[] = [
   { text: '<iconify-icon class="i-mr" icon="mdi:home" style="color:#e74c3c"></iconify-icon>首頁', link: '/zh-TW/' },
   { text: '<iconify-icon class="i-mr" icon="mdi:file-document" style="color:#3498db"></iconify-icon>文檔', link: '/zh-TW/docs/quick-start' },
-  { text: '<iconify-icon class="i-mr" icon="mdi:download" style="color:#20c997"></iconify-icon>下載', link: 'https://github.com/LanRhyme/MicYou/releases/latest' }
+  { text: '<iconify-icon class="i-mr" icon="mdi:download" style="color:#20c997"></iconify-icon>下載', link: '/zh-TW/download' }
 ]
 
 // 貢獻者組件翻譯
@@ -14,6 +14,31 @@ export const contributors = {
   contributions: '次貢獻',
   developedWith: 'MicYou 開發自 ❤',
   thanksContributors: '感謝以下貢獻者'
+}
+
+// 下載組件翻譯
+export const download = {
+  title: '下載應用',
+  loading: '正在獲取最新版本...',
+  error: '無法獲取版本資訊',
+  viewOnGitHub: '前往 GitHub 下載',
+  viewReleaseNotes: '查看更新日誌',
+  installer: '安裝程式',
+  installerDesc: '推薦，自動安裝',
+  portable: '便攜版',
+  portableDesc: '解壓即用，包含 JRE',
+  portableNoJREDesc: '解壓即用，需自行安裝 JRE',
+  windowsDesc: 'Windows 10/11 64位元',
+  macOSDesc: 'macOS 11.0 及以上',
+  linuxDesc: '主流 Linux 發行版',
+  androidDesc: 'Android 8.0 及以上',
+  dmgArmDesc: '適用於 M1/M2/M3 晶片',
+  dmgIntelDesc: '適用於 Intel 晶片',
+  debDesc: '適用於 Debian/Ubuntu',
+  rpmDesc: '適用於 Fedora/RHEL',
+  archDesc: '適用於 Arch Linux (AUR)',
+  apkDesc: 'Android 安裝包',
+  copied: '已複製'
 }
 
 // 頁腳翻譯

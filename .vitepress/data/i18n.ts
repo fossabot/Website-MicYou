@@ -20,6 +20,13 @@ export const contributorsTranslations = {
   'zh-TW': zh_tw.contributors
 }
 
+// 下载组件翻译
+export const downloadTranslations = {
+  'zh-CN': zh.download,
+  'en': en.download,
+  'zh-TW': zh_tw.download
+}
+
 // 主题配置翻译
 export const themeConfigTranslations = {
   'zh-CN': zh.themeConfig,

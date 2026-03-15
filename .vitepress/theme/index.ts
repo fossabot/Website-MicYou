@@ -7,6 +7,7 @@ import '@theojs/lumen/style'
 import { Footer, BoxCube, Card, Links, Pill } from '@theojs/lumen'
 import { getFooterData, type Lang } from '../data/i18n'
 import Contributors from './components/ContributorsCards/Contributors.vue'
+import DownloadSection from './components/DownloadSection/DownloadSection.vue'
 import './style.css'
 
 export default {
@@ -28,7 +29,7 @@ export default {
     app.component('Card', Card)
     app.component('Links', Links)
     app.component('Pill', Pill)
-    // 注册贡献者组件
     app.component('Contributors', Contributors)
+    app.component('DownloadSection', DownloadSection)
   }
 } satisfies Theme

@@ -5,7 +5,7 @@ import type { DefaultTheme } from 'vitepress'
 export const nav: DefaultTheme.NavItem[] = [
   { text: '<iconify-icon class="i-mr" icon="mdi:home" style="color:#e74c3c"></iconify-icon>Home', link: '/en/' },
   { text: '<iconify-icon class="i-mr" icon="mdi:file-document" style="color:#3498db"></iconify-icon>Docs', link: '/en/docs/quick-start' },
-  { text: '<iconify-icon class="i-mr" icon="mdi:download" style="color:#20c997"></iconify-icon>Download', link: 'https://github.com/LanRhyme/MicYou/releases/latest' }
+  { text: '<iconify-icon class="i-mr" icon="mdi:download" style="color:#20c997"></iconify-icon>Download', link: '/en/download' }
 ]
 
 // Contributors component translations
@@ -14,6 +14,31 @@ export const contributors = {
   contributions: 'contributions',
   developedWith: 'MicYou Developed with ❤',
   thanksContributors: 'Thanks to our contributors'
+}
+
+// Download component translations
+export const download = {
+  title: 'Download',
+  loading: 'Fetching latest version...',
+  error: 'Failed to fetch version info',
+  viewOnGitHub: 'Download from GitHub',
+  viewReleaseNotes: 'View release notes',
+  installer: 'Installer',
+  installerDesc: 'Recommended, auto install',
+  portable: 'Portable',
+  portableDesc: 'Extract and run, includes JRE',
+  portableNoJREDesc: 'Extract and run, requires JRE',
+  windowsDesc: 'Windows 10/11 64-bit',
+  macOSDesc: 'macOS 11.0 and later',
+  linuxDesc: 'Major Linux distributions',
+  androidDesc: 'Android 8.0 and later',
+  dmgArmDesc: 'For M1/M2/M3 chips',
+  dmgIntelDesc: 'For Intel chips',
+  debDesc: 'For Debian/Ubuntu',
+  rpmDesc: 'For Fedora/RHEL',
+  archDesc: 'For Arch Linux (AUR)',
+  apkDesc: 'Android package',
+  copied: 'Copied'
 }
 
 // Footer translations

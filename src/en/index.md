@@ -11,10 +11,7 @@ hero:
   actions:
     - theme: brand
       text: Get Started
-      link: https://github.com/LanRhyme/MicYou#usage-guide
-    - theme: alt
-      text: Download
-      link: https://github.com/LanRhyme/MicYou/releases/latest
+      link: /en/docs/quick-start
 
 features:
   - icon: 📡

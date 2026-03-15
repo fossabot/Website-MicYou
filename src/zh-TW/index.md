@@ -11,10 +11,7 @@ hero:
   actions:
     - theme: brand
       text: 快速開始
-      link: https://github.com/LanRhyme/MicYou#使用指南
-    - theme: alt
-      text: 下載應用
-      link: https://github.com/LanRhyme/MicYou/releases/latest
+      link: /zh-TW/docs/quick-start
 
 features:
   - icon: 📡
