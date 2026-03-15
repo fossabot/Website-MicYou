@@ -116,6 +116,44 @@ Located in `.vitepress/theme/components/`:
 3. Update sidebar links in `src/docs/sidebar.ts`
 4. Update language translation configs if needed
 
+### Frontmatter Requirements
+
+All documentation pages **must** include frontmatter at the beginning:
+
+```markdown
+---
+title: Page Title - Site Name
+description: Brief description for SEO (150-160 characters recommended).
+---
+
+# Page Title
+
+Content...
+```
+
+**Required fields:**
+
+| Field | Description |
+|-------|-------------|
+| `title` | Page title, typically includes site name suffix |
+| `description` | SEO description for search engines and social sharing |
+
+**Examples:**
+
+```markdown
+---
+title: 快速开始 - MicYou 安装配置指南
+description: MicYou 快速开始指南，详细介绍如何在 Windows、macOS、Linux 和 Android 上安装和配置 MicYou。
+---
+
+---
+title: 常见问题 - MicYou 故障排除
+description: MicYou 常见问题解答，包括设备连接问题、防火墙设置、ADB 配置和音频输出故障排除等。
+---
+```
+
+**Homepage exception:** Uses `layout: home` with hero and features configuration instead of standard frontmatter.
+
 ## Image Handling
 
 - **Never use external image links** (GitHub issue attachments, external URLs, etc.)

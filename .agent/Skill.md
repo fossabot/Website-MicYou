@@ -21,13 +21,23 @@ Add a new documentation page with automatic multi-language translation and navig
 
 ```markdown
 ---
-title: Document Title
+title: Document Title - Site Name
+description: Brief description for SEO (150-160 characters recommended).
 ---
 
-# Title
+# Document Title
 
 Content...
 ```
+
+**Frontmatter Requirements:**
+
+| Field | Description | Example |
+|-------|-------------|---------|
+| `title` | Page title with site name suffix | `快速开始 - MicYou 安装配置指南` |
+| `description` | SEO description | `MicYou 快速开始指南，详细介绍如何安装和配置 MicYou。` |
+
+**Note:** Homepage uses `layout: home` configuration instead of standard frontmatter.
 
 ---
 

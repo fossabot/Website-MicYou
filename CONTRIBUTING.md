@@ -132,6 +132,33 @@ docs: update FAQ with new troubleshooting steps
 - Keep lines under 100 characters
 - Use relative links for internal references
 
+### Frontmatter Requirements
+
+All documentation pages **must** include frontmatter at the beginning of the file:
+
+```markdown
+---
+title: Page Title - Site Name
+description: Brief description of the page content for SEO and social sharing.
+---
+
+# Page Title
+
+Content...
+```
+
+**Required fields:**
+
+| Field | Description | Example |
+|-------|-------------|---------|
+| `title` | Page title with site name | `快速开始 - MicYou 安装配置指南` |
+| `description` | SEO description (150-160 characters recommended) | `MicYou 快速开始指南，详细介绍如何安装和配置 MicYou。` |
+
+**Special pages:**
+
+- Homepage uses `layout: home` with additional hero and features configuration
+- See existing files for reference patterns
+
 ### Image Guidelines
 
 - **Do not use external image links** (e.g., GitHub issue attachments, external URLs)
