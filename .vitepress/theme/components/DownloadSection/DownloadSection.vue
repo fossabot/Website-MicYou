@@ -157,6 +157,7 @@ onMounted(async () => {
   background: linear-gradient(120deg, var(--vp-c-brand-1), var(--vp-c-brand-2));
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  line-height: 1.5;
 }
 
 .version-badge {
