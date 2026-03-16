@@ -2,7 +2,6 @@
 import { computed, onMounted, ref, onUnmounted } from "vue";
 import { useData } from "vitepress";
 import VPTeamMembers from "vitepress/dist/client/theme-default/components/VPTeamMembers.vue";
-import ContributorsItem from "./ContributorsItem.vue";
 import { contributorsTranslations, type Lang } from "../../../data/i18n";
 import { svgIcon } from "../../icon";
 
@@ -157,25 +156,32 @@ onUnmounted(() => observer?.disconnect());
 </script>
 
 <template>
-  <section ref="sectionRef" class="contributors-section" aria-labelledby="contributors-title">
-    <!-- 作者展示 - 使用 VitePress TeamMembers 组件 -->
+  <section ref="sectionRef" class="contributors-section">
+    <!-- 作者展示 -->
     <div class="authors-wrapper">
-      <h2 id="authors-title" class="section-title">
-        {{ t.developedWith }}
-      </h2>
+      <h2 class="section-title">{{ t.developedWith }}</h2>
       <VPTeamMembers size="small" :members="authors" />
     </div>
 
-    <!-- 贡献者展示 - 使用 feature 风格卡片 -->
+    <!-- 贡献者展示 -->
     <div v-if="contributors.length > 0" class="contributors-wrapper">
-      <h2 id="contributors-title" class="section-title">
-        {{ t.thanksContributors }}
-      </h2>
-      <ul class="contributors-grid" role="list">
-        <li v-for="contributor in contributors" :key="contributor.name">
-          <ContributorsItem :member="contributor" />
-        </li>
-      </ul>
+      <h2 class="section-title">{{ t.thanksContributors }}</h2>
+      <div class="contributors-grid">
+        <a
+          v-for="c in contributors"
+          :key="c.name"
+          :href="c.link"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="contributor-card"
+        >
+          <img :src="c.avatar" :alt="c.name" class="avatar" />
+          <div class="info">
+            <span class="name">{{ c.name }}</span>
+            <span class="title">{{ c.title }}</span>
+          </div>
+        </a>
+      </div>
     </div>
   </section>
 </template>
@@ -186,25 +192,19 @@ onUnmounted(() => observer?.disconnect());
   padding: 0 24px;
 }
 
-.authors-wrapper,
-.contributors-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 .section-title {
   text-align: center;
   color: var(--vp-c-text-2);
   font-size: 1.25rem;
   font-weight: 500;
   margin: 48px 0 24px;
-  padding-bottom: 8px;
 }
 
-/* 作者卡片并排等宽撑满 */
-.authors-wrapper {
-  width: 100%;
+.authors-wrapper,
+.contributors-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .authors-wrapper :deep(.VPTeamMembers) {
@@ -224,16 +224,54 @@ onUnmounted(() => observer?.disconnect());
 
 .contributors-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
   width: 100%;
   max-width: 1152px;
-  margin: 0 auto;
-  padding: 0;
-  list-style: none;
 }
 
-/* 平板竖屏优化 */
+.contributor-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px;
+  border-radius: 12px;
+  background: var(--vp-c-bg-soft);
+  text-decoration: none;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.contributor-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--vp-shadow-2);
+}
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  box-shadow: var(--vp-shadow-1);
+}
+
+.info {
+  margin-top: 12px;
+  text-align: center;
+}
+
+.name {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+}
+
+.title {
+  display: block;
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--vp-c-text-2);
+}
+
 @media (max-width: 768px) {
   .contributors-section {
     padding: 0 16px;
@@ -243,13 +281,8 @@ onUnmounted(() => observer?.disconnect());
     margin: 32px 0 20px;
     font-size: 1.125rem;
   }
-
-  .contributors-grid {
-    gap: 16px;
-  }
 }
 
-/* 手机竖屏优化 */
 @media (max-width: 480px) {
   .contributors-section {
     margin-top: 32px;
@@ -259,10 +292,8 @@ onUnmounted(() => observer?.disconnect());
   .section-title {
     margin: 24px 0 16px;
     font-size: 1rem;
-    padding-bottom: 4px;
   }
 
-  /* 作者卡片改为单列 */
   .authors-wrapper :deep(.VPTeamMembers.small .container) {
     grid-template-columns: 1fr;
     gap: 12px;
@@ -271,6 +302,23 @@ onUnmounted(() => observer?.disconnect());
   .contributors-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
+  }
+
+  .contributor-card {
+    padding: 16px 12px;
+  }
+
+  .avatar {
+    width: 48px;
+    height: 48px;
+  }
+
+  .name {
+    font-size: 14px;
+  }
+
+  .title {
+    font-size: 12px;
   }
 }
 </style>
