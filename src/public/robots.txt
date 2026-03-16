@@ -21,6 +21,8 @@ User-agent: adidxbot
 # apple.com search engine
 User-agent: Applebot
 user-agent: AppleNewsBot
+# archive.org web archive
+User-agent: archive.org_bot
 # baidu.com chinese search engine
 User-agent: Baiduspider
 User-agent: Baiduspider-image
