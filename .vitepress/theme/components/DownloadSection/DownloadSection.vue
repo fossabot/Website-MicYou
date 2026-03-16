@@ -14,7 +14,8 @@ const loading = ref(true);
 const error = ref(false);
 const copiedId = ref<string | null>(null);
 
-const _platforms = computed(() => [
+// 平台配置
+const platforms = computed(() => [
 	{
 		name: "Windows",
 		icon: "simple-icons:windows",
@@ -72,10 +73,10 @@ const _platforms = computed(() => [
 	},
 ]);
 
-const _getDownloadUrl = (pattern: string) =>
+const getDownloadUrl = (pattern: string) =>
 	`https://github.com/LanRhyme/MicYou/releases/download/v${latestVersion.value}/${pattern.replace("{version}", latestVersion.value)}`;
 
-const _copyCommand = async (cmd: string) => {
+const copyCommand = async (cmd: string) => {
 	try {
 		await navigator.clipboard.writeText(cmd);
 		copiedId.value = cmd;
@@ -134,7 +135,7 @@ onMounted(async () => {
 
     <template v-else>
       <div class="download-card" role="region" :aria-label="t.title">
-        <template v-for="(platform, idx) in _platforms" :key="platform.name">
+        <template v-for="(platform, idx) in platforms" :key="platform.name">
           <div v-if="idx" class="divider" aria-hidden="true"></div>
           <div class="download-row">
             <div class="platform-info">
@@ -150,7 +151,7 @@ onMounted(async () => {
               <template v-for="file in platform.files" :key="file.pattern || file.copyCommand">
                 <a
                   v-if="file.pattern"
-                  :href="_getDownloadUrl(file.pattern)"
+                  :href="getDownloadUrl(file.pattern)"
                   class="btn"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -163,7 +164,7 @@ onMounted(async () => {
                   v-else
                   class="btn"
                   :class="{ copied: copiedId === file.copyCommand }"
-                  @click="_copyCommand(file.copyCommand!)"
+                  @click="copyCommand(file.copyCommand!)"
                   :aria-label="copiedId === file.copyCommand ? t.copied : `复制命令: ${file.name}`"
                   :aria-pressed="copiedId === file.copyCommand"
                 >

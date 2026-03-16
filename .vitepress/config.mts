@@ -81,11 +81,7 @@ export default defineConfig({
 		["meta", { name: "robots", content: "index, follow" }],
 		["meta", { name: "googlebot", content: "index, follow" }],
 		// JSON-LD 结构化数据
-		[
-			"script",
-			{ type: "application/ld+json" },
-			JSON.stringify(jsonLdWebSite),
-		],
+		["script", { type: "application/ld+json" }, JSON.stringify(jsonLdWebSite)],
 		[
 			"script",
 			{ type: "application/ld+json" },
@@ -122,10 +118,7 @@ export default defineConfig({
 			"link",
 			{ rel: "dns-prefetch", href: "https://avatars.githubusercontent.com" },
 		],
-		[
-			"link",
-			{ rel: "dns-prefetch", href: "https://github.com" },
-		],
+		["link", { rel: "dns-prefetch", href: "https://github.com" }],
 		// 字体显示优化 - 防止 FOUT/CLS
 		[
 			"style",
@@ -149,8 +142,7 @@ export default defineConfig({
 			.replace(/\/index$/, "/");
 		const canonicalUrl = `${SITE_URL}/${pagePath}`;
 		const ogImage = pageData.frontmatter.ogImage || "/app_icon.png";
-		const pageKeywords =
-			pageData.frontmatter.keywords || DEFAULT_KEYWORDS;
+		const pageKeywords = pageData.frontmatter.keywords || DEFAULT_KEYWORDS;
 
 		// 确定当前语言和路径
 		let langCode = "zh-CN";
@@ -189,7 +181,14 @@ export default defineConfig({
 					href: `${SITE_URL}/zh-TW/${langPath}`,
 				},
 			],
-			["link", { rel: "alternate", hreflang: "x-default", href: `${SITE_URL}/${langPath}` }],
+			[
+				"link",
+				{
+					rel: "alternate",
+					hreflang: "x-default",
+					href: `${SITE_URL}/${langPath}`,
+				},
+			],
 		];
 
 		const head: HeadConfig[] = [

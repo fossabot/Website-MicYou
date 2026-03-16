@@ -7,16 +7,13 @@ import { contributorsTranslations, type Lang } from "../../../data/i18n";
 import { svgIcon } from "../../icon";
 
 const { lang } = useData();
+const t = computed(
+	() =>
+		contributorsTranslations[lang.value as Lang] ||
+		contributorsTranslations["zh-CN"],
+);
 
-// 获取当前语言的翻译
-const t = computed(() => {
-	const currentLang = lang.value as Lang;
-	return (
-		contributorsTranslations[currentLang] || contributorsTranslations["zh-CN"]
-	);
-});
-
-// 作者列表 - 使用 VitePress TeamMembers 样式
+// 作者列表
 const authors = computed(() => [
 	{
 		avatar: "https://github.com/LanRhyme.png?size=80",
@@ -44,173 +41,119 @@ const authors = computed(() => [
 	},
 ]);
 
-// 贡献者列表 - 从 GitHub API 获取
-const contributors = ref<
-	Array<{
-		avatar: string;
-		name: string;
-		title: string;
-		link: string;
-	}>
->([]);
+// 贡献者数据类型
+interface Contributor {
+	avatar: string;
+	name: string;
+	title: string;
+	link: string;
+}
 
+const contributors = ref<Contributor[]>([]);
 const loading = ref(true);
 const isVisible = ref(false);
 const sectionRef = ref<HTMLElement | null>(null);
 
-// 作者用户名集合，用于过滤
-const authorUsernames = new Set(["LanRhyme", "ChinsaaWei"]);
-
-// bot 账号集合
-const botUsernames = new Set(["dependabot[bot]", "crowdin-bot"]);
-
 // 缓存配置
 const CACHE_KEY = "contributors-cache";
-const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 小时
+const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 小时
 
-interface CachedData {
-	data: Array<{
-		avatar: string;
-		name: string;
-		title: string;
-		link: string;
-	}>;
-	timestamp: number;
-	lang: string;
-}
+// 需要过滤的用户名
+const excludeUsers = new Set([
+	"LanRhyme",
+	"ChinsaaWei",
+	"dependabot[bot]",
+	"crowdin-bot",
+]);
 
-// 从缓存获取数据
-function getCachedData(): CachedData | null {
+// 缓存操作
+function getCache(): { data: Contributor[]; lang: string } | null {
 	try {
 		const cached = localStorage.getItem(CACHE_KEY);
 		if (!cached) return null;
-
-		const parsed = JSON.parse(cached) as CachedData;
-		const now = Date.now();
-
-		// 检查缓存是否过期
-		if (now - parsed.timestamp > CACHE_DURATION) {
+		const { data, timestamp, lang } = JSON.parse(cached);
+		if (Date.now() - timestamp > CACHE_TTL) {
 			localStorage.removeItem(CACHE_KEY);
 			return null;
 		}
-
-		return parsed;
+		return { data, lang };
 	} catch {
 		return null;
 	}
 }
 
-// 保存数据到缓存
-function setCachedData(data: CachedData["data"], currentLang: string) {
+function setCache(data: Contributor[]) {
 	try {
-		const cacheData: CachedData = {
-			data,
-			timestamp: Date.now(),
-			lang: currentLang,
-		};
-		localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
+		localStorage.setItem(
+			CACHE_KEY,
+			JSON.stringify({ data, timestamp: Date.now(), lang: lang.value }),
+		);
 	} catch {
-		// localStorage 可能已满或不可用，静默失败
+		/* ignore */
 	}
-}
-
-// GitHub API 返回的贡献者数据类型
-interface GitHubContributor {
-	total: number;
-	author: {
-		login: string;
-		avatar_url: string;
-		html_url: string;
-	} | null;
 }
 
 // 获取贡献者数据
 async function fetchContributors() {
-	// 先尝试从缓存获取
-	const cached = getCachedData();
-	if (cached && cached.lang === lang.value) {
+	const cached = getCache();
+	if (cached?.lang === lang.value) {
 		contributors.value = cached.data;
 		loading.value = false;
 		return;
 	}
 
 	try {
-		const response = await fetch(
+		const res = await fetch(
 			"https://api.github.com/repos/LanRhyme/MicYou/stats/contributors",
 		);
-		if (!response.ok) throw new Error("Failed to fetch contributors");
+		const data = await res.json();
 
-		const data = (await response.json()) as GitHubContributor[];
+		if (!Array.isArray(data)) throw new Error("Data not ready");
 
-		// 检查返回数据是否为数组（GitHub API 有时返回 202 状态的对象）
-		if (!Array.isArray(data)) {
-			throw new Error("Contributors data is not ready yet");
-		}
+		contributors.value = data
+			.filter((c: { author?: { login: string } }) => {
+				const login = c.author?.login;
+				return login && !excludeUsers.has(login) && !login.includes("[bot]");
+			})
+			.sort((a: { total: number }, b: { total: number }) => b.total - a.total)
+			.map(
+				(c: {
+					total: number;
+					author: { login: string; avatar_url: string; html_url: string };
+				}) => ({
+					avatar: `${c.author.avatar_url}&size=80`,
+					name: c.author.login,
+					title: `${c.total} ${t.value.contributions}`,
+					link: c.author.html_url,
+				}),
+			);
 
-		// 过滤掉作者和 bot 账号，并按贡献数降序排列
-		const contributorsData = data
-			.filter(
-				(
-					c,
-				): c is GitHubContributor & {
-					author: NonNullable<GitHubContributor["author"]>;
-				} => {
-					const login = c.author?.login;
-					return (
-						login !== undefined &&
-						!authorUsernames.has(login) &&
-						!botUsernames.has(login) &&
-						!login.includes("[bot]")
-					);
-				},
-			)
-			.sort((a, b) => b.total - a.total)
-			.map((c) => ({
-				avatar: `${c.author.avatar_url}&size=80`,
-				name: c.author.login,
-				title: `${c.total} ${t.value.contributions}`,
-				link: c.author.html_url,
-			}));
-
-		contributors.value = contributorsData;
-		// 保存到缓存
-		setCachedData(contributorsData, lang.value as string);
-	} catch (error) {
-		console.error("Failed to load contributors:", error);
-		// 如果请求失败但有旧缓存，仍然使用旧缓存
-		if (cached) {
-			contributors.value = cached.data;
-		}
+		setCache(contributors.value);
+	} catch (err) {
+		console.error("Failed to load contributors:", err);
+		if (cached) contributors.value = cached.data;
 	} finally {
 		loading.value = false;
 	}
 }
 
-// Intersection Observer 用于延迟加载
+// Intersection Observer 延迟加载
 let observer: IntersectionObserver | null = null;
 
 onMounted(() => {
-	// 使用 Intersection Observer 延迟加载贡献者数据
 	observer = new IntersectionObserver(
-		(entries) => {
-			if (entries[0].isIntersecting && !isVisible.value) {
+		([entry]) => {
+			if (entry.isIntersecting && !isVisible.value) {
 				isVisible.value = true;
 				fetchContributors();
 			}
 		},
 		{ rootMargin: "200px" },
 	);
-
-	if (sectionRef.value) {
-		observer.observe(sectionRef.value);
-	}
+	if (sectionRef.value) observer.observe(sectionRef.value);
 });
 
-onUnmounted(() => {
-	if (observer) {
-		observer.disconnect();
-	}
-});
+onUnmounted(() => observer?.disconnect());
 </script>
 
 <template>

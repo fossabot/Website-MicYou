@@ -44,10 +44,7 @@ export default {
 				const { lang } = useData();
 				const currentLang = (lang.value || "zh-CN") as Lang;
 				const footerData = getFooterData(currentLang);
-				return h("div", [
-					h(WebVitals),
-					h(Footer, { Footer_Data: footerData }),
-				]);
+				return h("div", [h(WebVitals), h(Footer, { Footer_Data: footerData })]);
 			},
 		});
 	},
