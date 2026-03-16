@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, onUnmounted } from "vue";
 import { useData } from "vitepress";
 import VPTeamMembers from "vitepress/dist/client/theme-default/components/VPTeamMembers.vue";
 import ContributorsItem from "./ContributorsItem.vue";
@@ -55,6 +55,8 @@ const contributors = ref<
 >([]);
 
 const loading = ref(true);
+const isVisible = ref(false);
+const sectionRef = ref<HTMLElement | null>(null);
 
 // 作者用户名集合，用于过滤
 const authorUsernames = new Set(["LanRhyme", "ChinsaaWei"]);
@@ -122,7 +124,8 @@ interface GitHubContributor {
 	} | null;
 }
 
-onMounted(async () => {
+// 获取贡献者数据
+async function fetchContributors() {
 	// 先尝试从缓存获取
 	const cached = getCachedData();
 	if (cached && cached.lang === lang.value) {
@@ -181,11 +184,37 @@ onMounted(async () => {
 	} finally {
 		loading.value = false;
 	}
+}
+
+// Intersection Observer 用于延迟加载
+let observer: IntersectionObserver | null = null;
+
+onMounted(() => {
+	// 使用 Intersection Observer 延迟加载贡献者数据
+	observer = new IntersectionObserver(
+		(entries) => {
+			if (entries[0].isIntersecting && !isVisible.value) {
+				isVisible.value = true;
+				fetchContributors();
+			}
+		},
+		{ rootMargin: "200px" },
+	);
+
+	if (sectionRef.value) {
+		observer.observe(sectionRef.value);
+	}
+});
+
+onUnmounted(() => {
+	if (observer) {
+		observer.disconnect();
+	}
 });
 </script>
 
 <template>
-  <section class="contributors-section" aria-labelledby="contributors-title">
+  <section ref="sectionRef" class="contributors-section" aria-labelledby="contributors-title">
     <!-- 作者展示 - 使用 VitePress TeamMembers 组件 -->
     <div class="authors-wrapper">
       <h2 id="authors-title" class="section-title">

@@ -56,10 +56,20 @@ export default {
 		app.component("Copy", CopyText);
 		app.component("Contributors", Contributors);
 		app.component("DownloadSection", DownloadSection);
-		// 注册 Umami Analytics 插件
-		umamiAnalytics({
-			id: "7f5e889c-6a31-4074-95b7-78d52bb559ce",
-			src: "https://umami.micyou.top/script.js",
-		});
+		// 注册 Umami Analytics 插件 - 延迟加载优化 INP
+		if (typeof window !== "undefined") {
+			// 使用 requestIdleCallback 延迟加载分析脚本
+			const loadAnalytics = () => {
+				umamiAnalytics({
+					id: "7f5e889c-6a31-4074-95b7-78d52bb559ce",
+					src: "https://umami.micyou.top/script.js",
+				});
+			};
+			if ("requestIdleCallback" in window) {
+				requestIdleCallback(loadAnalytics, { timeout: 2000 });
+			} else {
+				setTimeout(loadAnalytics, 100);
+			}
+		}
 	},
 } satisfies Theme;

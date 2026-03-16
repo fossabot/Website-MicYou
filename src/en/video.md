@@ -2,6 +2,7 @@
 aside: false
 title: Video Tutorials - MicYou Guide
 description: MicYou video tutorials including project introduction, what's new, and usage guides to help you get started turning your phone into a PC microphone.
+keywords: MicYou tutorial,MicYou video,MicYou guide,phone microphone tutorial,Android microphone tutorial
 ---
 
 # Video Tutorials

@@ -1,6 +1,7 @@
 ---
 title: FAQ - MicYou Troubleshooting
 description: MicYou frequently asked questions including device connection issues, firewall settings, ADB configuration, and audio output troubleshooting.
+keywords: MicYou FAQ,MicYou troubleshooting,MicYou cannot connect,firewall settings,ADB issues,audio issues
 ---
 
 ## FAQ

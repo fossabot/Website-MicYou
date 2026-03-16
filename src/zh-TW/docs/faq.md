@@ -1,6 +1,7 @@
 ---
 title: 常見問題 - MicYou 故障排除
 description: MicYou 常見問題解答，包括裝置連線問題、防火牆設定、ADB 設定和音訊輸出故障排除等。
+keywords: MicYou常見問題,MicYou故障排除,MicYou無法連線,防火牆設定,ADB問題,音訊問題
 ---
 
 # 常見問題
