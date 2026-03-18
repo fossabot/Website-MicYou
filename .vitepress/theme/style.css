@@ -88,6 +88,11 @@ iframe {
 	transform: translate(-50%, -50%);
 }
 
+.VPNavBar:not(.home.top) .nav-stats-center {
+	opacity: 0;
+	pointer-events: none;
+}
+
 :focus-visible {
 	outline: 2px solid var(--vp-c-brand-1);
 	outline-offset: 2px;
