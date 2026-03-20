@@ -6,6 +6,9 @@ import * as zh_tw from "./lang/zh_tw";
 
 export type Lang = "zh-CN" | "en" | "zh-TW";
 
+// 下载组件翻译键类型
+export type DownloadKey = keyof typeof zh.download;
+
 // 导航栏
 export const navTranslations: Record<Lang, DefaultTheme.NavItem[]> = {
 	"zh-CN": zh.nav,

@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { useData } from "vitepress";
 import { computed, ref } from "vue";
-import { downloadTranslations, type Lang } from "../../../data/i18n";
+import {
+	downloadTranslations,
+	type DownloadKey,
+	type Lang,
+} from "../../../data/i18n";
 import ghdata from "../../../../src/ghdata.json";
 
 const { lang } = useData();
@@ -12,7 +16,12 @@ const t = computed(
 const version = ref(ghdata.version);
 const copied = ref<string | null>(null);
 
-const platforms = [
+const platforms: {
+	name: string;
+	icon: string;
+	desc: DownloadKey;
+	files: { name: DownloadKey; pattern?: string; copy?: string }[];
+}[] = [
 	{
 		name: "Windows",
 		icon: "simple-icons:windows",
