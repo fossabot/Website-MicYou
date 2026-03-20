@@ -1,12 +1,12 @@
 {
-	"name": "test",
+	"name": "micyouwebsite",
 	"version": "1.0.0",
 	"description": "",
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"dev": "vitepress dev",
-		"build": "vitepress build",
+		"build": "pnpm run fetch:ghdata && vitepress build",
 		"preview": "vitepress preview",
 		"lint": "biome lint .",
 		"format": "biome format --write .",

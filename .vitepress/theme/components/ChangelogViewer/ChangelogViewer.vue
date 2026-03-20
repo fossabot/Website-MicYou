@@ -10,131 +10,102 @@ const t = computed(
 		changelogTranslations[lang.value as Lang] || changelogTranslations["zh-CN"],
 );
 
-const changelog = ref<string>("");
+const changelog = ref("");
 const loading = ref(true);
 const error = ref<string | null>(null);
 
-// Changelog API URL - 用户端获取，不需要 secret
 const CHANGELOG_URL = "https://bot.micyou.top/changelog.md";
-
-// 缓存配置
 const CACHE_KEY = "micyou-changelog";
 const CACHE_DURATION = 6 * 60 * 60 * 1000; // 6 小时
 
-interface CacheData {
-	content: string;
-	timestamp: number;
-}
-
-// 获取缓存
-function getCache(): CacheData | null {
+// 缓存操作
+const getCache = (): { content: string; timestamp: number } | null => {
 	try {
-		const cached = localStorage.getItem(CACHE_KEY);
-		if (cached) {
-			return JSON.parse(cached);
-		}
+		return JSON.parse(localStorage.getItem(CACHE_KEY) || "");
 	} catch {
-		// ignore
+		return null;
 	}
-	return null;
-}
+};
 
-// 设置缓存
-function setCache(content: string) {
+const setCache = (content: string) => {
 	try {
-		const data: CacheData = {
-			content,
-			timestamp: Date.now(),
-		};
-		localStorage.setItem(CACHE_KEY, JSON.stringify(data));
-	} catch {
-		// ignore
-	}
-}
-
-// 检查缓存是否有效
-function isCacheValid(cache: CacheData | null): boolean {
-	if (!cache) return false;
-	return Date.now() - cache.timestamp < CACHE_DURATION;
-}
-
-// GitHub 链接匹配正则
-const GITHUB_PR_ISSUE_REGEX =
-	/^https:\/\/github\.com\/([^/]+)\/([^/]+)\/(pull|issues)\/(\d+)$/;
-const GITHUB_COMPARE_REGEX =
-	/^https:\/\/github\.com\/([^/]+)\/([^/]+)\/compare\/(.+)$/;
-
-// 使用 marked 扩展来处理链接
-const githubLinkExtension = {
-	name: "githubLink",
-	level: "inline" as const,
-	start(src: string) {
-		return src.indexOf("https://github.com");
-	},
-	tokenizer(src: string) {
-		const match = src.match(
-			/^(https:\/\/github\.com\/[^/\s]+\/[^/\s]+\/(pull|issues|compare)\/[^\s]+)/,
+		localStorage.setItem(
+			CACHE_KEY,
+			JSON.stringify({ content, timestamp: Date.now() }),
 		);
-		if (match) {
-			return {
-				type: "githubLink",
-				raw: match[0],
-				href: match[0],
-			};
-		}
-		return undefined;
-	},
-	renderer(token: Tokens.Generic) {
-		// PR/Issue 链接
-		const prMatch = token.href.match(GITHUB_PR_ISSUE_REGEX);
-		if (prMatch) {
-			return `<a href="${token.href}" target="_blank" rel="noopener noreferrer">#${prMatch[4]}</a>`;
-		}
-		// Compare 链接
-		const compareMatch = token.href.match(GITHUB_COMPARE_REGEX);
-		if (compareMatch) {
-			return `<a href="${token.href}" target="_blank" rel="noopener noreferrer"><code>${compareMatch[3]}</code></a>`;
-		}
-		return `<a href="${token.href}" target="_blank" rel="noopener noreferrer">${token.href}</a>`;
-	},
+	} catch {
+		/* ignore */
+	}
 };
 
-// 处理 @username 提及
-const mentionExtension = {
-	name: "mention",
-	level: "inline" as const,
-	start(src: string) {
-		return src.indexOf("@");
-	},
-	tokenizer(src: string) {
-		const match = src.match(/^@([a-zA-Z0-9_-]+)/);
-		if (match) {
-			return {
-				type: "mention",
-				raw: match[0],
-				username: match[1],
-			};
-		}
-		return undefined;
-	},
-	renderer(token: Tokens.Generic) {
-		return `<a href="https://github.com/${token.username}" target="_blank" rel="noopener noreferrer">@${token.username}</a>`;
-	},
-};
+const isCacheValid = (cache: ReturnType<typeof getCache>) =>
+	cache && Date.now() - cache.timestamp < CACHE_DURATION;
 
-// 配置 marked
-marked.use({ extensions: [githubLinkExtension, mentionExtension] });
+// GitHub 链接处理：PR/Issue 链接和 @username 提及
+const githubExtensions = [
+	{
+		name: "githubLink",
+		level: "inline" as const,
+		start: (src: string) => src.indexOf("https://github.com"),
+		tokenizer(src: string) {
+			const match = src.match(
+				/^(https:\/\/github\.com\/[^/\s]+\/[^/\s]+\/(pull|issues|compare)\/[^\s]+)/,
+			);
+			if (!match) return undefined;
+			const [, href, type] = match;
+			// PR/Issue: 提取编号
+			const numMatch = href.match(/\/(pull|issues)\/(\d+)$/);
+			if (numMatch) {
+				return {
+					type: "githubLink",
+					raw: match[0],
+					href,
+					text: `#${numMatch[2]}`,
+				};
+			}
+			// Compare: 提取版本
+			const cmpMatch = href.match(/\/compare\/(.+)$/);
+			if (cmpMatch) {
+				return {
+					type: "githubLink",
+					raw: match[0],
+					href,
+					text: cmpMatch[1],
+					isCode: true,
+				};
+			}
+			return { type: "githubLink", raw: match[0], href, text: href };
+		},
+		renderer(token: Tokens.Generic) {
+			const content = token.isCode ? `<code>${token.text}</code>` : token.text;
+			return `<a href="${token.href}" target="_blank" rel="noopener noreferrer">${content}</a>`;
+		},
+	},
+	{
+		name: "mention",
+		level: "inline" as const,
+		start: (src: string) => src.indexOf("@"),
+		tokenizer(src: string) {
+			const match = src.match(/^@([a-zA-Z0-9_-]+)/);
+			return match
+				? { type: "mention", raw: match[0], username: match[1] }
+				: undefined;
+		},
+		renderer(token: Tokens.Generic) {
+			return `<a href="https://github.com/${token.username}" target="_blank" rel="noopener noreferrer">@${token.username}</a>`;
+		},
+	},
+];
 
-const renderedContent = computed(() => {
-	if (!changelog.value) return "";
-	return marked.parse(changelog.value, {
-		gfm: true,
-		breaks: true,
-	});
-});
+marked.use({ extensions: githubExtensions });
+
+const renderedContent = computed(() =>
+	changelog.value
+		? marked.parse(changelog.value, { gfm: true, breaks: true })
+		: "",
+);
 
 onMounted(async () => {
-	// 先检查缓存
 	const cache = getCache();
 	if (cache && isCacheValid(cache)) {
 		changelog.value = cache.content;
@@ -142,24 +113,15 @@ onMounted(async () => {
 		return;
 	}
 
-	// 缓存无效或不存在，从服务器获取
 	try {
 		const res = await fetch(CHANGELOG_URL);
-		if (!res.ok) {
-			throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-		}
+		if (!res.ok) throw new Error(`HTTP ${res.status}`);
 		const content = await res.text();
 		changelog.value = content;
-		// 更新缓存
 		setCache(content);
 	} catch (e) {
-		// 如果请求失败但有旧缓存，使用旧缓存
-		if (cache) {
-			changelog.value = cache.content;
-		} else {
-			error.value = e instanceof Error ? e.message : String(e);
-			console.error("Failed to fetch changelog:", e);
-		}
+		if (cache) changelog.value = cache.content;
+		else error.value = e instanceof Error ? e.message : String(e);
 	} finally {
 		loading.value = false;
 	}
@@ -169,16 +131,15 @@ onMounted(async () => {
 <template>
   <div class="changelog-container">
     <!-- 加载状态 -->
-    <div v-if="loading" class="loading">
+    <div v-if="loading" class="state">
       <iconify-icon icon="mdi:loading" class="spin" />
       <span>{{ t.loading }}</span>
     </div>
 
     <!-- 错误状态 -->
-    <div v-else-if="error" class="error">
+    <div v-else-if="error" class="state error">
       <iconify-icon icon="mdi:alert-circle-outline" />
       <span>{{ t.error }}</span>
-      <p class="error-detail">{{ error }}</p>
     </div>
 
     <!-- 内容 -->
@@ -193,21 +154,21 @@ onMounted(async () => {
   padding: 24px;
 }
 
-.loading,
-.error {
+.state {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: 12px;
   padding: 48px 24px;
   color: var(--vp-c-text-2);
-  font-size: 1rem;
 }
 
-.loading iconify-icon,
-.error iconify-icon {
+.state iconify-icon {
   font-size: 2rem;
+}
+
+.state.error {
+  color: var(--vp-c-danger-1);
 }
 
 .spin {
@@ -215,32 +176,15 @@ onMounted(async () => {
 }
 
 @keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.error {
-  color: var(--vp-c-danger-1);
-}
-
-.error-detail {
-  font-size: 0.875rem;
-  color: var(--vp-c-text-3);
-  margin-top: 8px;
+  to { transform: rotate(360deg); }
 }
 
 .changelog-content {
   line-height: 1.8;
 }
 
-/* Markdown 样式 */
 .changelog-content :deep(h2) {
-  margin-top: 2rem;
-  margin-bottom: 1rem;
+  margin: 2rem 0 1rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--vp-c-divider);
   font-size: 1.5rem;
@@ -252,18 +196,17 @@ onMounted(async () => {
 }
 
 .changelog-content :deep(h3) {
-  margin-top: 1.5rem;
-  margin-bottom: 0.75rem;
+  margin: 1.5rem 0 0.75rem;
   font-size: 1.125rem;
   font-weight: 600;
 }
 
-.changelog-content :deep(p) {
+.changelog-content :deep(p),
+.changelog-content :deep(ul) {
   margin: 0.75rem 0;
 }
 
 .changelog-content :deep(ul) {
-  margin: 0.75rem 0;
   padding-left: 1.5rem;
 }
 
