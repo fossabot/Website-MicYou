@@ -60,6 +60,18 @@ const copyCmd = async (cmd: string) => {
 	copied.value = cmd;
 	setTimeout(() => (copied.value = null), 2000);
 };
+
+const changelogLink = computed(() => {
+	const currentLang = lang.value as Lang;
+	switch (currentLang) {
+		case "en":
+			return "/en/changelog";
+		case "zh-TW":
+			return "/zh-TW/changelog";
+		default:
+			return "/changelog";
+	}
+});
 </script>
 
 <template>
@@ -93,7 +105,7 @@ const copyCmd = async (cmd: string) => {
     </div>
 
     <p class="notes">
-      <a href="https://github.com/LanRhyme/MicYou/releases/latest" target="_blank">{{ t.viewReleaseNotes }}</a>
+      <a :href="changelogLink">{{ t.viewReleaseNotes }}</a>
     </p>
   </div>
 </template>

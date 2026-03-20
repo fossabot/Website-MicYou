@@ -16,8 +16,17 @@ export const nav: DefaultTheme.NavItem[] = [
 		link: "/en/download",
 	},
 	{
-		text: '<iconify-icon class="i-mr" icon="mdi:video" style="color:#9c27b0"></iconify-icon>Videos',
-		link: "/en/video",
+		text: '<iconify-icon class="i-mr" icon="mdi:view-list" style="color:#9c27b0"></iconify-icon>More',
+		items: [
+			{
+				text: '<iconify-icon class="i-mr" icon="mdi:video" style="color:#9c27b0"></iconify-icon>Videos',
+				link: "/en/video",
+			},
+			{
+				text: '<iconify-icon class="i-mr" icon="mdi:history" style="color:#ff9800"></iconify-icon>Changelog',
+				link: "/en/changelog",
+			},
+		],
 	},
 ];
 
