@@ -27,7 +27,7 @@ function animateNumber(from: number, to: number, key: "pageviews" | "visits") {
 
 	const step = (now: number) => {
 		const progress = Math.min((now - start) / duration, 1);
-		const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+		const eased = 1 - (1 - progress) ** 3; // easeOutCubic
 		displayStats.value[key] = Math.round(from + diff * eased);
 		if (progress < 1) requestAnimationFrame(step);
 	};
