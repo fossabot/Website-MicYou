@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useData } from "vitepress";
+import { umamiTranslations, type Lang } from "../../../data/i18n";
 
 const { lang } = useData();
 const stats = ref<{ pageviews: number; visits: number } | null>(null);
 const displayStats = ref({ pageviews: 0, visits: 0 });
 
-const t = {
-	"zh-CN": { views: "浏览量", visits: "访问次数", loading: "加载中..." },
-	en: { views: "Views", visits: "Visits", loading: "Loading..." },
-	"zh-TW": { views: "瀏覽量", visits: "訪問次數", loading: "載入中..." },
-}[lang.value] ?? { views: "浏览量", visits: "访问次数", loading: "加载中..." };
+const t = computed(
+	() => umamiTranslations[lang.value as Lang] ?? umamiTranslations["zh-CN"],
+);
 
 const CACHE_KEY = "umami-stats-cache";
 const formatNum = (n: number) =>

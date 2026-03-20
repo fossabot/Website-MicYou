@@ -65,6 +65,13 @@ export const changelog = {
 	error: "Failed to load",
 };
 
+// Umami component translations
+export const umami = {
+	views: "Views",
+	visits: "Visits",
+	loading: "Loading...",
+};
+
 // Footer translations
 export const footer = {
 	project: "Project",

@@ -65,6 +65,13 @@ export const changelog = {
 	error: "加载失败",
 };
 
+// Umami 组件翻译
+export const umami = {
+	views: "浏览量",
+	visits: "访问次数",
+	loading: "加载中...",
+};
+
 // 页脚翻译
 export const footer = {
 	project: "项目",
