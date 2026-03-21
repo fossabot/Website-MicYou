@@ -15,6 +15,7 @@ const t = computed(
 );
 const version = ref(ghdata.version);
 const copied = ref<string | null>(null);
+const useMirror = ref(false);
 
 const platforms: {
 	name: string;
@@ -61,8 +62,14 @@ const platforms: {
 	},
 ];
 
-const getUrl = (pattern: string) =>
+const githubUrl = (pattern: string) =>
 	`https://github.com/LanRhyme/MicYou/releases/download/v${version.value}/${pattern.replace("{version}", version.value)}`;
+
+const mirrorUrl = (pattern: string) =>
+	`https://atomgit.com/gh_mirrors/mi/MicYou/releases/download/v${version.value}/${pattern.replace("{version}", version.value)}`;
+
+const getUrl = (pattern: string) =>
+	useMirror.value ? mirrorUrl(pattern) : githubUrl(pattern);
 
 const copyCmd = async (cmd: string) => {
 	await navigator.clipboard.writeText(cmd);
@@ -91,6 +98,15 @@ const changelogLink = computed(() => {
     </header>
 
     <div class="card">
+      <div class="mirror-switch">
+        <span class="source-label" :class="{ active: !useMirror }">{{ t.sourceGithub }}</span>
+        <label class="switch">
+          <input type="checkbox" v-model="useMirror">
+          <span class="slider"></span>
+        </label>
+        <span class="source-label" :class="{ active: useMirror }">{{ t.sourceMirror }}</span>
+        <span class="switch-tip">{{ t.mirrorTip }}</span>
+      </div>
       <div v-for="(p, i) in platforms" :key="p.name" class="row" :class="{ border: i }">
         <div class="info">
           <iconify-icon :icon="p.icon" class="icon" />
@@ -131,7 +147,7 @@ const changelogLink = computed(() => {
   align-items: center;
   justify-content: center;
   gap: 16px;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
   color: #5a7a9d;
 }
 
@@ -149,6 +165,79 @@ const changelogLink = computed(() => {
   background: var(--vp-c-brand-soft);
   color: var(--vp-c-brand-1);
   border: 1px solid var(--vp-c-brand-1);
+}
+
+.mirror-switch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 12px 24px;
+  background: var(--vp-c-bg);
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+
+.source-label {
+  font-size: 0.875rem;
+  color: var(--vp-c-text-3);
+  transition: color 0.2s;
+}
+
+.source-label.active {
+  color: var(--vp-c-brand-1);
+  font-weight: 500;
+}
+
+.switch-tip {
+  font-size: 0.75rem;
+  color: var(--vp-c-text-3);
+  margin-left: 8px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--vp-c-divider);
+  border-radius: 22px;
+  transition: 0.3s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  bottom: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+input:checked + .slider {
+  background: var(--vp-c-brand-1);
+}
+
+input:checked + .slider:before {
+  transform: translateX(22px);
 }
 
 .card {
@@ -258,6 +347,10 @@ const changelogLink = computed(() => {
 
   .dl-head h1 {
     font-size: 1.5rem;
+  }
+
+  .mirror-switch {
+    flex-wrap: wrap;
   }
 }
 </style>

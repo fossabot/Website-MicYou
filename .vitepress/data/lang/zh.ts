@@ -57,6 +57,10 @@ export const download = {
 	arch: "Arch",
 	apk: "APK",
 	copied: "已复制",
+	// 下载源
+	sourceGithub: "GitHub",
+	sourceMirror: "镜像",
+	mirrorTip: "中国大陆用户推荐使用镜像下载",
 };
 
 // Changelog 组件翻译

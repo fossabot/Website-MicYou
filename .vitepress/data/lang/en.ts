@@ -57,6 +57,10 @@ export const download = {
 	arch: "Arch",
 	apk: "APK",
 	copied: "Copied",
+	// Download source
+	sourceGithub: "GitHub",
+	sourceMirror: "Mirror",
+	mirrorTip: "Mirror recommended for users in China Mainland",
 };
 
 // Changelog component translations
