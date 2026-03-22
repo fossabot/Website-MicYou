@@ -15,6 +15,7 @@ Transform your Android device into a high-quality microphone for PC
 [![VitePress][badge-vitepress]][vitepress-url]
 [![Vue][badge-vue]][vue-url]
 [![pnpm][badge-pnpm]][pnpm-url]
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FMicYou-Dev%2FWebsite-MicYou.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FMicYou-Dev%2FWebsite-MicYou?ref=badge_shield)
 
 [Live Site][live-site] | [Main Project][main-project] | [Telegram][telegram] | [Report Issues][report-issues]
 
@@ -150,3 +151,6 @@ Copyright © 2026 LanRhyme
 [main-project]: https://github.com/LanRhyme/MicYou
 [telegram]: https://t.me/MicYouChannel
 [report-issues]: https://github.com/LanRhyme/Website-MicYou/issues
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FMicYou-Dev%2FWebsite-MicYou.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FMicYou-Dev%2FWebsite-MicYou?ref=badge_large)
