@@ -43,7 +43,14 @@ const authors = computed(() => [
 
 // 从预获取的数据中获取贡献者
 const contributors = computed(() =>
-	ghdata.contributors.map((c) => ({
+	(
+		ghdata.contributors as Array<{
+			avatar_url: string;
+			login: string;
+			contributions: number;
+			html_url: string;
+		}>
+	).map((c) => ({
 		avatar: `${c.avatar_url}?size=80`,
 		name: c.login,
 		title: `${c.contributions} ${t.value.contributions}`,

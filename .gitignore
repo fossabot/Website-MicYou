@@ -3,3 +3,5 @@ node_modules/
 .vitepress/dist/
 pnpm-workspace.yaml
 .DS_Store
+.vercel
+.env*.local
